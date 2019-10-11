@@ -1,0 +1,7 @@
+﻿case load file 'Dictionary.csv';
+case split columns 'ruleKeys', 'ruleValues' with value '/';
+
+template load file 'Dictionary.nbitt';
+suite generate;
+suite save as 'Dictionary.nbits';
+
