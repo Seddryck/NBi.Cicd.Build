@@ -1,0 +1,50 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-latest'
+
+steps:
+
+- task: InlinePowershell@1
+  inputs:
+    Script: |
+      $latestRelease = Invoke-WebRequest https://api.github.com/repos/seddryck/nbi/releases/latest -Headers @{"Accept"="application/json"}
+      $json = $latestRelease.Content | ConvertFrom-Json
+      write-host 'latest version:' $json.tag_name
+      $url = $json.assets | ? { $_.Name -Match "Genbi" }  | % browser_download_url
+      write-host 'url:' $url
+      Invoke-WebRequest -Uri $url -OutFile "$env:SYSTEM_ARTIFACTSDIRECTORY\genbi.zip"
+
+- task: ExtractFiles@1
+  inputs:
+    archiveFilePatterns: 'genbi.zip'
+    destinationFolder: '$(System.ArtifactsDirectory)\\Genbi\\'
+    cleanDestinationFolder: true
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      echo building test-suite
+      
+      $(System.ArtifactsDirectory)\\Genbi\\genbi.exe $(System.DefaultWorkingDirectory)\\dictionary.genbiL -q
+      
+      echo test-suite built
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)\'
+    Contents: '*.nbits'
+    TargetFolder: '$(build.artifactstagingdirectory)\'
+    CleanTargetFolder: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'test-suite'
+    publishLocation: 'Container'
