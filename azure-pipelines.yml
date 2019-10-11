@@ -19,11 +19,13 @@ steps:
       write-host 'latest version:' $json.tag_name
       $url = $json.assets | ? { $_.Name -Match "Genbi" }  | % browser_download_url
       write-host 'url:' $url
-      Invoke-WebRequest -Uri $url -OutFile "$env:SYSTEM_ARTIFACTSDIRECTORY\genbi.zip"
+      $destination = "$env:SYSTEM_ARTIFACTSDIRECTORY\genbi.zip"
+      write-host 'destination:' $destination
+      Invoke-WebRequest -Uri $url -OutFile $destination
 
 - task: ExtractFiles@1
   inputs:
-    archiveFilePatterns: 'genbi.zip'
+    archiveFilePatterns: '$(System.ArtifactsDirectory)\\genbi.zip'
     destinationFolder: '$(System.ArtifactsDirectory)\\Genbi\\'
     cleanDestinationFolder: true
 
