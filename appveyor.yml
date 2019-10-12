@@ -1,0 +1,37 @@
+version: build.{build}
+
+image: Visual Studio 2019
+
+build_script:
+
+- ps: >-
+    $latestRelease = Invoke-WebRequest https://api.github.com/repos/seddryck/nbi/releases/latest -Headers @{"Accept"="application/json"}
+    
+    $json = $latestRelease.Content | ConvertFrom-Json
+    
+    write-host 'latest version:' $json.tag_name
+    
+    $url = $json.assets | ? { $_.Name -Match "Genbi" }  | % browser_download_url
+    
+    write-host 'url:' $url
+    
+    $zipfilePath = 'C:\Projects\genbi.zip'
+    
+    write-host 'destination:' $zipfilePath
+    
+    Invoke-WebRequest -Uri $url -OutFile $zipfilePath
+    
+    $destinationUnzipPath = 'C:\Projects\Genbi'
+    
+    & 7z x "-o$($destinationUnzipPath)" $zipfilePath -r ;
+
+- cmd: >-
+    echo 'building test-suite ...'
+    
+    "C:\projects\Genbi\Genbi.exe" "dictionary.genbil" -q
+    
+    echo 'test-suite built.'
+
+artifacts:
+- path: '*.nbits'
+  name: Test-suite
