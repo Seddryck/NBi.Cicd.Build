@@ -1,7 +1,8 @@
 repo_name: Seddryck/NBi.Cicd.Build
 report_id: 125f1ff24cff003f9e1bf55fa1a72d52
+version: 0.1
 repo_type: Public
-timestamp: '2023-11-12T20:23:10+00:00'
+timestamp: '2024-01-05T08:47:58+00:00'
 requested_by: Seddryck
 provider: github
 branch: master
@@ -15,6 +16,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Continuous Integration
   image_url: https://img.stackshare.io/service/10164/528389819366_e7a0672f0480b3e98d21_512.png
+  detection_source_url: https://github.com/Seddryck/NBi.Cicd.Build/blob/master/azure-pipelines.yml
   detection_source: azure-pipelines.yml
   last_updated_by: Cédric L. Charlier
   last_updated_on: 2019-10-11 21:38:30.000000000 Z
@@ -26,4 +28,5 @@ tools:
   category: Build, Test, Deploy
   sub_category: Version Control System
   image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source_url: https://github.com/Seddryck/NBi.Cicd.Build
   detection_source: Repo Metadata
