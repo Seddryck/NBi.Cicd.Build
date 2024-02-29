@@ -2,7 +2,7 @@ repo_name: Seddryck/NBi.Cicd.Build
 report_id: 125f1ff24cff003f9e1bf55fa1a72d52
 version: 0.1
 repo_type: Public
-timestamp: '2024-01-05T08:47:58+00:00'
+timestamp: '2024-02-29T18:41:03+00:00'
 requested_by: Seddryck
 provider: github
 branch: master
